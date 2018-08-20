@@ -65,3 +65,18 @@ class TestWQClient(TestCase):
     response = self.client.record_work(work_unit)
     self.assertEqual(response['status'], 'COMPLETED')
     self.assertTrue('end_time' in response)
+
+  def test_project_about(self):
+    project = self.client.create_project("Test Project")
+    self.assertTrue("id" in project)
+    self.assertTrue("description" in project)
+
+    kwargs_list = [{"kwargs": "%s"} for i in range(2)]
+    response = self.client.create_work(project['id'], kwargs_list)
+    self.assertEqual(len(kwargs_list), len(response))
+    for elem in response:
+      self.assertTrue("id" in elem)
+
+    project_about = self.client.get_project_about(project['id'])
+    print(project_about)
+    self.assertEqual(2, project_about['ready'])

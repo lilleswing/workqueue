@@ -82,3 +82,8 @@ class WQClient(object):
     payload = json.dumps(work_unit)
     r = requests.put(url, data=payload)
     return r.json()
+
+  def get_project_about(self, project_id):
+    url = "%s/v1/project/%s" % (self.host, project_id)
+    r = requests.get(url)
+    return r.json()
