@@ -7,6 +7,10 @@ if [ ! -d /var/log/workserver ]; then
     sudo chown $USER:$USER /var/log/workserver
 fi
 
+if [ -f scripts/workserver.conf ] ; then
+    rm scripts/workserver.conf
+fi
+
 echo "[program:workserver]" >> scripts/workserver.conf
 echo "command=/bin/bash scripts/run_server.sh" >> scripts/workserver.conf
 echo "directory=$CUR_DIR" >> scripts/workserver.conf
