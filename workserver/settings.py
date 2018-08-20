@@ -13,14 +13,16 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import json
 
-try:
-  with open('settings.json') as fin:
-    extra_settings = json.loads(fin.read())
-except:
-  extra_settings = {'ALLOWED_HOSTS': []}
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+try:
+  with open(os.path.join(BASE_DIR, 'settings.json')) as fin:
+    extra_settings = json.loads(fin.read())
+except Exception as e:
+  extra_settings = {
+    'ALLOWED_HOSTS': [],
+    'DEBUG': True,
+  }
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -29,7 +31,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-(wy+fv4bav9##t0)%47m@$sz11^dm-qb9knz&pn)@udxaarul'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = extra_settings['DEBUG']
 
 ALLOWED_HOSTS = []
 for host in extra_settings['ALLOWED_HOSTS']:
