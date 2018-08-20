@@ -25,7 +25,9 @@ logs are in /var/log/workserver
 
 ## Client
 
-whls located [her](https://karlleswing.com/misc/pypi/workqueue_client/)
+whls located [here](https://karlleswing.com/misc/pypi/workqueue_client/)
 ```bash
 pip install <whl_file>
 ```
+
+[Usage Examples](https://github.com/lilleswing/workqueue/blob/master/workqueue_client/test_WQClient.py)
