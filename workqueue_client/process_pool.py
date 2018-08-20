@@ -25,10 +25,8 @@ def run_command(args):
       c = delegator.run(command)
       print(c.err)
       print(c.out)
-      print("command finished")
       results = open(fout.name + "_results", 'r', encoding='utf-8').read()
       logs = open(fout.name + "_logs", 'r', encoding='utf-8').read()
-      print("done reading files")
       work_unit['result'] = results
       work_unit['logs'] = logs
       client.record_work(work_unit)

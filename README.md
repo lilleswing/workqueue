@@ -31,3 +31,11 @@ pip install <whl_file>
 ```
 
 [Usage Examples](https://github.com/lilleswing/workqueue/blob/master/workqueue_client/test_WQClient.py)
+
+## Example
+see scripts/examples/example.sh
+
+This walks through an example of hashing an integer distributed.
+
+NOTE that sqlite does not have row level locking so you will not have
+the ONLY once semantics
