@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/lilleswing/workqueue.svg?branch=master)](https://travis-ci.org/lilleswing/workqueue)
 # Workserver
 Simple server for logging pleasingly parallel jobs
 
