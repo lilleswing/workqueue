@@ -24,10 +24,16 @@ def record_work(request):
   """
   /v1/record_work
   :param request:
+  PUT with body
+  {
+    "id": work_unit.id,
+    "result": work_unit.result,
+    "logs": work_unit.logs
+  }
   :return:
   """
-  if request.method != 'POST':
-    raise ValueError("Must be a POST")
+  if request.method != 'PUT':
+    raise ValueError("Must Be PUT")
   ws_work_unit = json.loads(request.body)
   work_unit = WorkUnit.objects.filter(pk=ws_work_unit['id']).first()
   work_unit.status = WorkUnit.COMPLETED
@@ -39,7 +45,35 @@ def record_work(request):
   ws_work_unit['end_time'] = str(work_unit.end_time)
   ws_work_unit['status'] = work_unit.status
   s = json.dumps(ws_work_unit)
-  return json.dumps(s)
+  return HttpResponse(s)
+
+
+def create_work(request, project_id):
+  """
+  /v1/project/<project_id/work
+  :param request:
+  POST with body
+  [{
+    "kwargs": work_unit.kwargs,
+  }]
+  :param project_id:
+  :return:
+  """
+  my_project = Project.objects.filter(pk=project_id).first()
+  if request.method != 'POST':
+    raise ValueError("Must be POST")
+  retval = []
+  ws_w_units = json.loads(request.body)
+  for ws_w_unit in ws_w_units:
+    w_unit = WorkUnit(project=my_project, kwargs=ws_w_unit['kwargs'], status=WorkUnit.READY)
+    w_unit.save()
+    retval.append({
+      'id': w_unit.id,
+      'kwargs': w_unit.kwargs
+    })
+  s = json.dumps(retval)
+  return HttpResponse(s)
+
 
 
 def project_about(request, project_id):
