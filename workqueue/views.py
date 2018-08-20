@@ -38,7 +38,7 @@ def record_work(request):
   """
   if request.method != 'PUT':
     raise ValueError("Must Be PUT")
-  ws_work_unit = request.json()
+  ws_work_unit = json.loads(request.body.decode('utf-8'))
   work_unit = WorkUnit.objects.filter(pk=ws_work_unit['id']).first()
   work_unit.status = WorkUnit.COMPLETED
   work_unit.logs = ws_work_unit['logs']
@@ -141,7 +141,7 @@ def create_project(request):
   """
   if request.method != 'POST':
     raise ValueError("Must be POST")
-  ws_project = request.json()
+  ws_project = json.loads(request.body.decode('utf-8'))
 
   project = Project(description=ws_project['description'])
   project.save()
