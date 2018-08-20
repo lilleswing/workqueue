@@ -8,7 +8,7 @@ from workqueue.views import about, record_work, get_work
 class TestRequest(object):
   def __init__(self, method=None, body=None):
     self.method = method
-    self.body = body
+    self.body = bytes(body, encoding='utf-8')
 
 
 class ViewsTestCase(TestCase):
