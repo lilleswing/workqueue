@@ -50,6 +50,7 @@ def record_work(request):
   s = json.dumps(ws_work_unit)
   return HttpResponse(s)
 
+
 @csrf_exempt
 def create_work(request, project_id):
   """
