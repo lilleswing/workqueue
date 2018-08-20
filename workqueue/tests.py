@@ -1,6 +1,5 @@
 import json
 
-from django.http import HttpRequest
 from django.test import TestCase
 from workqueue.models import Project, WorkUnit
 from workqueue.views import about, record_work, get_work
