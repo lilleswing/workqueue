@@ -2,6 +2,7 @@
 import datetime
 
 from django.http import HttpResponse
+from django.utils import timezone
 import json
 
 from django.views.decorators.csrf import csrf_exempt
@@ -41,7 +42,7 @@ def record_work(request):
   work_unit = WorkUnit.objects.filter(pk=ws_work_unit['id']).first()
   work_unit.status = WorkUnit.COMPLETED
   work_unit.logs = ws_work_unit['logs']
-  work_unit.end_time = datetime.datetime.now()
+  work_unit.end_time = timezone.now()
   work_unit.result = ws_work_unit['result']
   work_unit.save()
 
@@ -119,7 +120,7 @@ def get_work(request, project_id):
     s = json.dumps(d)
     return HttpResponse(s)
   work_unit.status = WorkUnit.RUNNING
-  work_unit.start_time = datetime.datetime.now()
+  work_unit.start_time = timezone.now()
   work_unit.save()
   d = {
     'id': work_unit.id,
