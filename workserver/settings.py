@@ -91,6 +91,8 @@ DATABASES = {
     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
   }
 }
+if 'DATABASES' in extra_settings:
+  DATABASES = extra_settings['DATABASES']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
