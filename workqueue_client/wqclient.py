@@ -1,4 +1,5 @@
 import json
+import random
 
 import requests
 
@@ -33,17 +34,22 @@ class WQClient(object):
     r = requests.get(url)
     return r.json()
 
-  def create_work(self, project_id, kwargs_list):
+  def create_work(self, project_id, kwargs_list, shuffle=True):
     """
     :param project_id: int
     :param kwargs_list:
       list of dict, json serializable
       each dict must have key "kwargs"
+    :param shuffle:  bool
+      True by default
+      Randomize order of the kwargs_list
     :return:
     """
     for elem in kwargs_list:
       if 'kwargs' not in elem:
         raise ValueError("All elements need key kwargs")
+    if shuffle:
+      random.shuffle(kwargs_list)
     url = "%s/v1/project/%s/create_work" % (self.host, project_id)
     payload = json.dumps(kwargs_list)
     r = requests.post(url, data=payload)
