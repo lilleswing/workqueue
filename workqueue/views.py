@@ -1,6 +1,7 @@
 # Create your views here.
 import datetime
 
+from django.db import transaction
 from django.http import HttpResponse
 from django.utils import timezone
 import json
@@ -38,7 +39,7 @@ def record_work(request):
   """
   if request.method != 'PUT':
     raise ValueError("Must Be PUT")
-  ws_work_unit = json.loads(request.body)
+  ws_work_unit = json.loads(request.body.decode('utf-8'))
   work_unit = WorkUnit.objects.filter(pk=ws_work_unit['id']).first()
   work_unit.status = WorkUnit.COMPLETED
   work_unit.logs = ws_work_unit['logs']
@@ -68,7 +69,7 @@ def create_work(request, project_id):
   if request.method != 'POST':
     raise ValueError("Must be POST")
   retval = []
-  ws_w_units = json.loads(request.body)
+  ws_w_units = json.loads(request.body.decode('utf-8'))
   for ws_w_unit in ws_w_units:
     w_unit = WorkUnit(project=my_project, kwargs=ws_w_unit['kwargs'], status=WorkUnit.READY)
     w_unit.save()
@@ -102,6 +103,7 @@ def project_about(request, project_id):
   return HttpResponse(s)
 
 
+@transaction.atomic
 def get_work(request, project_id):
   """
   /v1/project/<project_id/get_work
@@ -141,7 +143,7 @@ def create_project(request):
   """
   if request.method != 'POST':
     raise ValueError("Must be POST")
-  ws_project = json.loads(request.body)
+  ws_project = json.loads(request.body.decode('utf-8'))
 
   project = Project(description=ws_project['description'])
   project.save()
