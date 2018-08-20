@@ -68,7 +68,7 @@ def create_work(request, project_id):
   if request.method != 'POST':
     raise ValueError("Must be POST")
   retval = []
-  ws_w_units = json.loads(request.body)
+  ws_w_units = json.loads(request.body.decode('utf-8'))
   for ws_w_unit in ws_w_units:
     w_unit = WorkUnit(project=my_project, kwargs=ws_w_unit['kwargs'], status=WorkUnit.READY)
     w_unit.save()
