@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import json
+from socket import gethostname, gethostbyname
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,6 +37,8 @@ DEBUG = extra_settings['DEBUG']
 ALLOWED_HOSTS = []
 for host in extra_settings['ALLOWED_HOSTS']:
   ALLOWED_HOSTS.append(host)
+ALLOWED_HOSTS.append(gethostname())
+ALLOWED_HOSTS.append(gethostbyname(gethostname()))
 
 # Application definition
 
