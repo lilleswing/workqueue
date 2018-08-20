@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import json
+
+try:
+  with open('settings.json') as fin:
+    extra_settings = json.loads(fin.read())
+except:
+  extra_settings = {'ALLOWED_HOSTS': []}
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,6 +32,8 @@ SECRET_KEY = '-(wy+fv4bav9##t0)%47m@$sz11^dm-qb9knz&pn)@udxaarul'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+for host in extra_settings['ALLOWED_HOSTS']:
+  ALLOWED_HOSTS.append(host)
 
 # Application definition
 
