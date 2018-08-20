@@ -48,3 +48,31 @@ class WQClient(object):
     payload = json.dumps(kwargs_list)
     r = requests.post(url, data=payload)
     return r.json()
+
+  def record_work(self, work_unit):
+    """
+    :param work_unit:
+    {
+      "id": int,
+      "result": str,
+      "logs" str
+    }
+    :return:
+    {
+      "id": int,
+      "result": str,
+      "logs" str,
+      "end_date", str(datetime)
+      "status", "COMPLETED"
+    }
+    """
+    if 'id' not in work_unit:
+      raise ValueError("Work Unit Must have an ID To Save To")
+    if 'result' not in work_unit:
+      raise ValueError("Work Unit Must have an result, even if empty")
+    if 'logs' not in work_unit:
+      work_unit['logs'] = ""
+    url = "%s/v1/record_work" % self.host
+    payload = json.dumps(work_unit)
+    r = requests.put(url, data=payload)
+    return r.json()

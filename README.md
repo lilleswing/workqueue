@@ -21,3 +21,10 @@ By default it will deploy on port 8003
 * To change edit scripts/run_server.sh after first deploy
 
 logs are in /var/log/workserver
+
+## Client
+
+whls located [her](https://karlleswing.com/misc/pypi/workqueue_client/)
+```bash
+pip install <whl_file>
+```
