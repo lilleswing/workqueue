@@ -29,7 +29,7 @@ def record_work(request):
   if request.method != 'POST':
     raise ValueError("Must be a POST")
   ws_work_unit = json.loads(request.body)
-  work_unit = WorkUnit.objects.filter(WorkUnit.id == ws_work_unit['id']).first()
+  work_unit = WorkUnit.objects.filter(pk=ws_work_unit['id']).first()
   work_unit.status = WorkUnit.COMPLETED
   work_unit.logs = ws_work_unit['logs']
   work_unit.end_time = datetime.datetime.now()
@@ -49,8 +49,8 @@ def project_about(request, project_id):
   :param project_id: int
   :return:
   """
-  my_project = Project.objects.filter(Project.id == project_id).first()
-  work_units = WorkUnit.objects.filter(WorkUnit.project == my_project).all()
+  my_project = Project.objects.filter(pk=project_id).first()
+  work_units = WorkUnit.objects.filter(project=my_project).all()
   d = {
     "id": my_project.id,
     "description": my_project.description,
@@ -67,10 +67,10 @@ def get_work(request, project_id):
   :param project_id:
   :return:
   """
-  my_project = Project.objects.filter(Project.id == project_id).first()
+  my_project = Project.objects.get(pk=project_id)
   work_unit = WorkUnit.objects.select_for_update() \
-    .filter(WorkUnit.project == my_project) \
-    .filter(WorkUnit.status == WorkUnit.READY).first()
+    .filter(project=my_project) \
+    .filter(status=WorkUnit.READY).first()
   if work_unit is None:
     d = {
       "exists": False
@@ -84,6 +84,7 @@ def get_work(request, project_id):
     'id': work_unit.id,
     'key': work_unit.key,
     'kwargs': work_unit.kwargs,
+    "exists": True
   }
   s = json.dumps(d)
   return HttpResponse(s)
