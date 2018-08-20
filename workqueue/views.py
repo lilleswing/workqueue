@@ -8,6 +8,11 @@ from workqueue.models import Project, WorkUnit
 
 
 def about(request):
+  """
+  /v1/about
+  :param request:
+  :return:
+  """
   d = {
     "version": "0.0.1"
   }
@@ -15,7 +20,35 @@ def about(request):
   return HttpResponse(s)
 
 
+def record_work(request):
+  """
+  /v1/record_work
+  :param request:
+  :return:
+  """
+  if request.method != 'POST':
+    raise ValueError("Must be a POST")
+  ws_work_unit = json.loads(request.body)
+  work_unit = WorkUnit.objects.filter(WorkUnit.id == ws_work_unit['id']).first()
+  work_unit.status = WorkUnit.COMPLETED
+  work_unit.logs = ws_work_unit['logs']
+  work_unit.end_time = datetime.datetime.now()
+  work_unit.result = ws_work_unit['result']
+  work_unit.save()
+
+  ws_work_unit['end_time'] = str(work_unit.end_time)
+  ws_work_unit['status'] = work_unit.status
+  s = json.dumps(ws_work_unit)
+  return json.dumps(s)
+
+
 def project_about(request, project_id):
+  """
+  /v1/project/<project_id/
+  :param request:
+  :param project_id: int
+  :return:
+  """
   my_project = Project.objects.filter(Project.id == project_id).first()
   work_units = WorkUnit.objects.filter(WorkUnit.project == my_project).all()
   d = {
@@ -29,6 +62,7 @@ def project_about(request, project_id):
 
 def get_work(request, project_id):
   """
+  /v1/project/<project_id/get_work
   :param request:
   :param project_id:
   :return:
@@ -52,17 +86,4 @@ def get_work(request, project_id):
     'kwargs': work_unit.kwargs,
   }
   s = json.dumps(d)
-  return HttpResponse(s)
-
-
-def index(request):
-  projects = Project.objects.all()
-  retval = []
-  for project in projects:
-    d = {
-      "id": project.id,
-      "description": project.description
-    }
-    retval.append(d)
-  s = json.dumps(retval)
   return HttpResponse(s)

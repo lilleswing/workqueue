@@ -17,3 +17,4 @@ class WorkUnit(models.Model):
   status = models.CharField(max_length=200)
   start_time = models.DateTimeField('start_time')
   end_time = models.DateTimeField('end_time')
+  logs = models.TextField(null=True)
