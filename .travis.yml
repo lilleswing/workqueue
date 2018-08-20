@@ -13,7 +13,7 @@ install:
 - conda update -q conda
 - conda create --name workqueue
 - source activate workqueue
-- conda install --yes --file requirements.txt
+- pip install -r requirements.txt
 - python manage.py migrate
 script:
 - gunicorn workserver.wsgi --bind=0.0.0.0:8000 --workers=3 &
