@@ -4,6 +4,8 @@ import datetime
 from django.http import HttpResponse
 import json
 
+from django.views.decorators.csrf import csrf_exempt
+
 from workqueue.models import Project, WorkUnit
 
 
@@ -20,6 +22,7 @@ def about(request):
   return HttpResponse(s)
 
 
+@csrf_exempt
 def record_work(request):
   """
   /v1/record_work
@@ -47,7 +50,7 @@ def record_work(request):
   s = json.dumps(ws_work_unit)
   return HttpResponse(s)
 
-
+@csrf_exempt
 def create_work(request, project_id):
   """
   /v1/project/<project_id/work
@@ -75,7 +78,6 @@ def create_work(request, project_id):
   return HttpResponse(s)
 
 
-
 def project_about(request, project_id):
   """
   /v1/project/<project_id/
@@ -85,8 +87,8 @@ def project_about(request, project_id):
   """
   my_project = Project.objects.filter(pk=project_id).first()
   ready_units = WorkUnit.objects.filter(project=my_project, status=WorkUnit.READY).count()
-  running_units = WorkUnit.objects.filter(project=my_project, status=WorkUnit.running).count()
-  complete_units = WorkUnit.objects.filter(project=my_project, status=WorkUnit.complete).count()
+  running_units = WorkUnit.objects.filter(project=my_project, status=WorkUnit.RUNNING).count()
+  complete_units = WorkUnit.objects.filter(project=my_project, status=WorkUnit.COMPLETED).count()
   d = {
     "id": my_project.id,
     "description": my_project.description,
@@ -123,6 +125,27 @@ def get_work(request, project_id):
     'key': work_unit.key,
     'kwargs': work_unit.kwargs,
     "exists": True
+  }
+  s = json.dumps(d)
+  return HttpResponse(s)
+
+
+@csrf_exempt
+def create_project(request):
+  """
+  /v1/project
+  :param request:
+  :return:
+  """
+  if request.method != 'POST':
+    raise ValueError("Must be POST")
+  ws_project = json.loads(request.body)
+
+  project = Project(description=ws_project['description'])
+  project.save()
+  d = {
+    'id': project.id,
+    'description': project.description
   }
   s = json.dumps(d)
   return HttpResponse(s)

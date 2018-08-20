@@ -34,7 +34,7 @@ SECRET_KEY = '-(wy+fv4bav9##t0)%47m@$sz11^dm-qb9knz&pn)@udxaarul'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = extra_settings['DEBUG']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 for host in extra_settings['ALLOWED_HOSTS']:
   ALLOWED_HOSTS.append(host)
 ALLOWED_HOSTS.append(gethostname())
