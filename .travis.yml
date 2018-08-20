@@ -16,6 +16,7 @@ install:
 - conda install --yes --file requirements.txt
 - python manage.py migrate
 script:
+- python manage.py runserver &
 - python manage.py test
 after_success:
 - echo $TRAVIS_SECURE_ENV_VARS
