@@ -84,11 +84,15 @@ def project_about(request, project_id):
   :return:
   """
   my_project = Project.objects.filter(pk=project_id).first()
-  work_units = WorkUnit.objects.filter(project=my_project).all()
+  ready_units = WorkUnit.objects.filter(project=my_project, status=WorkUnit.READY).count()
+  running_units = WorkUnit.objects.filter(project=my_project, status=WorkUnit.running).count()
+  complete_units = WorkUnit.objects.filter(project=my_project, status=WorkUnit.complete).count()
   d = {
     "id": my_project.id,
     "description": my_project.description,
-    "work_units": len(work_units)
+    "ready": ready_units,
+    "running": running_units,
+    "complete": complete_units,
   }
   s = json.dumps(d)
   return HttpResponse(s)
