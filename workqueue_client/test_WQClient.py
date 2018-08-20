@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from workqueue_client.wqclient import WQClient
+from workqueue_client import WQClient
 
 
 class TestWQClient(TestCase):
