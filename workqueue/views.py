@@ -1,6 +1,7 @@
 # Create your views here.
 import datetime
 
+from django.db import transaction
 from django.http import HttpResponse
 from django.utils import timezone
 import json
@@ -102,6 +103,7 @@ def project_about(request, project_id):
   return HttpResponse(s)
 
 
+@transaction.atomic
 def get_work(request, project_id):
   """
   /v1/project/<project_id/get_work
